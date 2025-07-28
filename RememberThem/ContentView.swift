@@ -8,14 +8,28 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var viewModel = ViewModel()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            List {
+                ForEach(viewModel.persons.sorted()) { person in
+                    PersonCardListView(person: person)
+                }
+            }
+            .navigationTitle("RememberThem")
+            .navigationDestination(for: Person.self, destination: { person in
+                PersonDetailView(person: person)
+            })
+            .toolbar {
+                Button("Add person", systemImage: "plus") {
+                    viewModel.isShowingAddPersonView = true
+                }
+            }
+            .sheet(isPresented: $viewModel.isShowingAddPersonView) {
+                AddPersonView(savePerson: viewModel.addNewPerson)
+            }
         }
-        .padding()
     }
 }
 
