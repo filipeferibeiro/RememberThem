@@ -30,7 +30,7 @@ struct PersonCardListView: View {
 
 #Preview {
     if let image = UIImage(named: "example")?.pngData() {
-        PersonCardListView(person: Person(name: "Example", photo: image))
+        PersonCardListView(person: Person(name: "Example", photo: image, latitude: 50.1, longitude: 43.2))
     } else {
         Text("Image not found")
     }

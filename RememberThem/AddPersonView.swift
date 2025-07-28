@@ -15,6 +15,8 @@ struct AddPersonView: View {
     @State private var pickerPhoto: PhotosPickerItem?
     @State private var selectedPhoto: Data?
     
+    let locationFetcher = LocationFetcher()
+    
     var displayPhoto: Image? {
         guard let selectedPhoto else { return nil }
         guard let inputImage = UIImage(data: selectedPhoto) else { return nil }
@@ -61,13 +63,19 @@ struct AddPersonView: View {
             }
             .navigationTitle("Add new person")
             .navigationBarTitleDisplayMode(.inline)
+            .onAppear {
+                locationFetcher.start()
+            }
         }
     }
     
     func save() {
         guard let selectedPhoto else { return }
         
-        let newPerson = Person(name: personName, photo: selectedPhoto)
+        let latitude = locationFetcher.lastKnownLocation?.latitude
+        let longitude = locationFetcher.lastKnownLocation?.longitude
+        
+        let newPerson = Person(name: personName, photo: selectedPhoto, latitude: latitude, longitude: longitude)
         
         savePerson(newPerson)
         dismiss()

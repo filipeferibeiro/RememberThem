@@ -6,28 +6,38 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct PersonDetailView: View {
     var person: Person
     
     var body: some View {
-        ScrollView {
+        VStack(alignment: .leading) {
             person.personImage?
                 .resizable()
                 .scaledToFit()
                 .clipShape(.rect(cornerRadius: 10))
-                .padding(.horizontal)
-        }
-        .scrollBounceBehavior(.basedOnSize)
-        .navigationTitle(person.name)
             
-        
+            if let mapPosition = person.mapPosition, let coordinate = person.coordinate {
+                Text("Location")
+                    .font(.title.bold())
+                
+                Map(initialPosition: MapCameraPosition.region(mapPosition)) {
+                    Marker("Meet up", coordinate: coordinate)
+                }
+                .clipShape(.rect(cornerRadius: 10))
+            }
+            
+            Spacer()
+        }
+        .padding()
+        .navigationTitle(person.name)
     }
 }
 
 #Preview {
     if let image = UIImage(named: "example")?.pngData() {
-        PersonDetailView(person: Person(name: "Example", photo: image))
+        PersonDetailView(person: Person(name: "Example", photo: image, latitude: 50.3, longitude: -76.3))
     } else {
         Text("Image not found")
     }
