@@ -16,6 +16,7 @@ struct ContentView: View {
                 ForEach(viewModel.persons.sorted()) { person in
                     PersonCardListView(person: person)
                 }
+                .onDelete(perform: viewModel.deletePerson)
             }
             .navigationTitle("RememberThem")
             .navigationDestination(for: Person.self, destination: { person in

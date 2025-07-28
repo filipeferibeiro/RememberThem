@@ -38,5 +38,16 @@ extension ContentView {
             persons.append(person)
             save()
         }
+        
+        func deletePerson(at indexSet: IndexSet) {
+            let sortedPersons = persons.sorted()
+            let idsToDelete = indexSet.map { sortedPersons[$0].id }
+
+            persons.removeAll { person in
+                idsToDelete.contains(person.id)
+            }
+            
+            save()
+        }
     }
 }
